@@ -4,7 +4,10 @@ import (
 	"fmt"
 )
 
-func main() {
-	fmt.Println("Ola, mundindinho Go")
+func hello() string {
+	return "OIII MUNDINHO GOOO !!"
+}
 
+func main() {
+	fmt.Println(hello())
 }
