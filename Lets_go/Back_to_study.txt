@@ -1,1 +1,2 @@
 Função x metodo
+interface
