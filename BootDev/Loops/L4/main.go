@@ -1,12 +1,23 @@
 package main
 
-import (
-	"errors"
-)
+import "fmt"
 
-func divide(x, y float64) (float64, error) {
-	if y == 0 {
-		return 0, errors.New("no dividing by 0")
+func fizzbuzz() {
+	for i := 1; i < 101; i++ {
+		if i%3 == 0 && i%5 == 0 {
+			fmt.Printf("%v - fizzbuzz\n", i)
+		} else if i%3 == 0 {
+			fmt.Printf("%v - fizz\n", i)
+		} else if i%5 == 0 {
+			fmt.Printf("%v - buzz\n", i)
+		} else {
+			fmt.Printf("%v\n", i)
+		}
 	}
-	return x / y, nil
+}
+
+// don't touch below this line
+
+func main() {
+	fizzbuzz()
 }

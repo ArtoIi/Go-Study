@@ -5,57 +5,52 @@ import (
 	"testing"
 )
 
-func TestDivide(t *testing.T) {
+func Test(t *testing.T) {
 	type testCase struct {
-		dividend, divisor, expected float64
-		expectedError               string
+		costMultiplier   float64
+		maxCostInPennies int
+		expected         int
 	}
 
 	runCases := []testCase{
-		{10, 2, 5, ""},
-		{15, 3, 5, ""},
+		{1.1, 5, 4},
+		{1.3, 10, 5},
+		{1.35, 25, 7},
 	}
 
 	submitCases := append(runCases, []testCase{
-		{10, 0, 0, "can not divide 10 by zero"},
-		{15, 0, 0, "can not divide 15 by zero"},
-		{100, 10, 10, ""},
-		{16, 4, 4, ""},
-		{30, 6, 5, ""},
+		{1.2, 1, 1},
+		{1.2, 15, 7},
+		{1.3, 20, 7},
 	}...)
 
 	testCases := runCases
 	if withSubmit {
 		testCases = submitCases
 	}
-
 	skipped := len(submitCases) - len(testCases)
 
 	passCount := 0
 	failCount := 0
 
 	for _, test := range testCases {
-		output, err := divide(test.dividend, test.divisor)
-		var errString string
-		if err != nil {
-			errString = err.Error()
-		}
-		if output != test.expected || errString != test.expectedError {
+		output := getMaxMessagesToSend(test.costMultiplier, test.maxCostInPennies)
+		if output != test.expected {
 			failCount++
 			t.Errorf(`---------------------------------
 Inputs:     (%v, %v)
-Expecting:  (%v, %v)
-Actual:     (%v, %v)
+Expecting:  %v
+Actual:     %v
 Fail
-`, test.dividend, test.divisor, test.expected, test.expectedError, output, errString)
+`, test.costMultiplier, test.maxCostInPennies, test.expected, output)
 		} else {
 			passCount++
 			fmt.Printf(`---------------------------------
 Inputs:     (%v, %v)
-Expecting:  (%v, %v)
-Actual:     (%v, %v)
+Expecting:  %v
+Actual:     %v
 Pass
-`, test.dividend, test.divisor, test.expected, test.expectedError, output, errString)
+`, test.costMultiplier, test.maxCostInPennies, test.expected, output)
 		}
 	}
 

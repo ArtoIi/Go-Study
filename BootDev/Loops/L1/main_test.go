@@ -7,57 +7,48 @@ import (
 
 func Test(t *testing.T) {
 	type testCase struct {
-		msgToCustomer string
-		msgToSpouse   string
-		expectedCost  int
-		expectedErr   error
+		numMessages int
+		expected    float64
 	}
-
 	runCases := []testCase{
-		{"Thanks for coming in to our flower shop today!", "We hope you enjoyed your gift.", 0, fmt.Errorf("can't send texts over 25 characters")},
-		{"Thanks for joining us!", "Have a good day.", 76, nil},
+		{10, 10.45},
+		{20, 21.9},
 	}
 
 	submitCases := append(runCases, []testCase{
-		{"Thank you.", "Enjoy!", 32, nil},
-		{"We loved having you in!", "We hope the rest of your evening is fantastic.", 0, fmt.Errorf("can't send texts over 25 characters")},
+		{0, 0.0},
+		{1, 1.0},
+		{5, 5.10},
+		{30, 34.35},
 	}...)
 
 	testCases := runCases
 	if withSubmit {
 		testCases = submitCases
 	}
-
 	skipped := len(submitCases) - len(testCases)
+
 	passCount := 0
 	failCount := 0
 
 	for _, test := range testCases {
-		cost, err := sendSMSToCouple(test.msgToCustomer, test.msgToSpouse)
-		errString := ""
-		if err != nil {
-			errString = err.Error()
-		}
-		expectedErrString := ""
-		if test.expectedErr != nil {
-			expectedErrString = test.expectedErr.Error()
-		}
-		if cost != test.expectedCost || errString != expectedErrString {
+		output := bulkSend(test.numMessages)
+		if fmt.Sprintf("%.2f", output) != fmt.Sprintf("%.2f", test.expected) {
 			failCount++
 			t.Errorf(`---------------------------------
-Inputs:     (%v, %v)
-Expecting:  (%v, %v)
-Actual:     (%v, %v)
+Inputs:     (%v)
+Expecting:  %.2f
+Actual:     %.2f
 Fail
-`, test.msgToCustomer, test.msgToSpouse, test.expectedCost, test.expectedErr, cost, err)
+`, test.numMessages, test.expected, output)
 		} else {
 			passCount++
 			fmt.Printf(`---------------------------------
-Inputs:     (%v, %v)
-Expecting:  (%v, %v)
-Actual:     (%v, %v)
+Inputs:     (%v)
+Expecting:  %.2f
+Actual:     %.2f
 Pass
-`, test.msgToCustomer, test.msgToSpouse, test.expectedCost, test.expectedErr, cost, err)
+`, test.numMessages, test.expected, output)
 		}
 	}
 

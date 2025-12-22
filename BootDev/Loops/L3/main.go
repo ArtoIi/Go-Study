@@ -1,18 +1,18 @@
 package main
 
-import "fmt"
-
-type divideError struct {
-	dividend float64
-}
-
-func (e divideError) Error() string {
-	return fmt.Sprintf("can not divide %v by zero", e.dividend)
-}
-
-func divide(dividend, divisor float64) (float64, error) {
-	if divisor == 0 {
-		return 0, divideError{dividend: dividend}
+func getMaxMessagesToSend(costMultiplier float64, maxCostInPennies int) int {
+	actualCostInPennies := 1.0
+	maxMessagesToSend := 1
+	balance := float64(maxCostInPennies) - actualCostInPennies
+	for {
+		actualCostInPennies *= costMultiplier
+		balance -= actualCostInPennies
+		maxMessagesToSend++
+		if balance < 0 {
+			maxMessagesToSend--
+			break
+		}
 	}
-	return dividend / divisor, nil
+
+	return maxMessagesToSend
 }

@@ -5,24 +5,24 @@ import (
 	"testing"
 )
 
-func TestDivide(t *testing.T) {
+func TestCountGroupConnections(t *testing.T) {
 	type testCase struct {
-		x, y, expected float64
-		expectedErr    string
+		groupSize int
+		expected  int
 	}
 
 	runCases := []testCase{
-		{10, 0, 0, "no dividing by 0"},
-		{10, 2, 5, ""},
-		{15, 30, 0.5, ""},
-		{6, 3, 2, ""},
+		{1, 0},
+		{2, 1},
+		{3, 3},
+		{4, 6},
 	}
 
 	submitCases := append(runCases, []testCase{
-		{0, 10, 0, ""},
-		{100, 0, 0, "no dividing by 0"},
-		{-10, -2, 5, ""},
-		{-10, 2, -5, ""},
+		{0, 0},
+		{10, 45},
+		{100, 4950},
+		{1000, 499500},
 	}...)
 
 	testCases := runCases
@@ -36,27 +36,23 @@ func TestDivide(t *testing.T) {
 	failCount := 0
 
 	for _, test := range testCases {
-		result, err := divide(test.x, test.y)
-		errString := ""
-		if err != nil {
-			errString = err.Error()
-		}
-		if result != test.expected || errString != test.expectedErr {
+		result := countConnections(test.groupSize)
+		if result != test.expected {
 			failCount++
 			t.Errorf(`---------------------------------
-Inputs:     (%v, %v)
-Expecting:  (%v, %v)
-Actual:     (%v, %v)
+Group Size: %v
+Expecting: %v
+Actual:    %v
 Fail
-`, test.x, test.y, test.expected, test.expectedErr, result, errString)
+`, test.groupSize, test.expected, result)
 		} else {
 			passCount++
 			fmt.Printf(`---------------------------------
-Inputs:     (%v, %v)
-Expecting:  (%v, %v)
-Actual:     (%v, %v)
+Group Size: %v
+Expecting: %v
+Actual:    %v
 Pass
-`, test.x, test.y, test.expected, test.expectedErr, result, errString)
+`, test.groupSize, test.expected, result)
 		}
 	}
 

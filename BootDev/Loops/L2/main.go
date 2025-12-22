@@ -1,8 +1,17 @@
 package main
 
-import "fmt"
+func maxMessages(thresh int) int {
+	quantidade := 0
+	custo := 0
 
-func getSMSErrorString(cost float64, recipient string) string {
-	s = fmt.Sprintf("SMS that costs $%.2f to be sent to %s can not be sent", cost, recipient)
-	return s
+	for i := 0; ; i++ {
+		valor := 100 + i
+		if custo+valor > thresh {
+			break
+		}
+		custo += valor
+		quantidade++
+
+	}
+	return quantidade
 }
